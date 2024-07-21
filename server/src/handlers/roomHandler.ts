@@ -6,10 +6,10 @@ const roomHandler = (socket: Socket) => {
                 socket.join(roomId);// socket connection enters new room
                 socket.emit("room-created", { roomId });// emission of event from server site
                 console.log("room created with id", roomId);
-        };      
+        };
 
-        const joinRoom = () => {
-            console.log("New room joined");
+        const joinRoom = ({roomId}:{roomId: string}) => {
+            console.log("New user joined the room ",roomId);
         };
 
 
