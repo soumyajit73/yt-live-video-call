@@ -8,9 +8,13 @@ const Room: React.FC = () =>{
     const {socket,user}=useContext(SocketContext);
 
     useEffect(()=>{
-      if(user)  socket.emit("joined-room", {roomId: id, peerId: user._id});
+        
+      if(user) {
+                console.log("new user with id", user._id, "has joined room", id);
+                socket.emit("joined-room", {roomId: id, peerId: user._id});
+      } 
 
-    },[id]);
+    },[id,user,socket]);
     return(
         <div>
             room: {id}

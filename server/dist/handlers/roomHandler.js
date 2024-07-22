@@ -8,8 +8,8 @@ const roomHandler = (socket) => {
         socket.emit("room-created", { roomId }); // emission of event from server site
         console.log("room created with id", roomId);
     };
-    const joinedRoom = ({ roomId }) => {
-        console.log("New user joined the room ", roomId);
+    const joinedRoom = ({ roomId, peerId }) => {
+        console.log("New user joined the room ", roomId, "with peer id as", peerId);
     };
     socket.on("create-room", createRoom);
     socket.on("joined-room", joinedRoom);
