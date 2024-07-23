@@ -21,6 +21,11 @@ interface Props{
 export const SocketProvider: React.FC<Props> = ({children})=>{
     const navigate = useNavigate();
      const [user,setUser]=useState<Peer>();
+
+     const fetchParticipantList=({roomId, participants}: {roomId: string, participants: string[]})=>{
+        console.log("fetch room participants");
+        console.log(roomId, participants);
+     }
     useEffect(() =>{
 
         const userId = UUIDv4();
@@ -32,6 +37,7 @@ export const SocketProvider: React.FC<Props> = ({children})=>{
             }
             //transfer user to room page after collecting event of room-crfreated from server
             socket.on("room-created", enterRoom);
+            socket.on("get-users",fetchParticipantList);
     },[] )  
 
 
