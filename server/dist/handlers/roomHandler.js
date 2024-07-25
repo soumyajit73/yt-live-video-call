@@ -1,8 +1,11 @@
 "use strict";
+// import { Socket } from "socket.io";
+// import {v4 as UUIDv4} from "uuid";
+// import IRoomParams from "../interfaces/iRoomParams";
 Object.defineProperty(exports, "__esModule", { value: true });
 const uuid_1 = require("uuid");
+const rooms = {};
 const roomHandler = (socket) => {
-    const rooms = {};
     const createRoom = () => {
         const roomId = (0, uuid_1.v4)(); // unique room id for multiple connection exchange
         socket.join(roomId); // socket connection enters new room
@@ -11,14 +14,20 @@ const roomHandler = (socket) => {
         console.log("room created with id", roomId);
     };
     const joinedRoom = ({ roomId, peerId }) => {
+        console.log("joined room called with roomId:", roomId, "and peerId:", peerId);
+        console.log("Current rooms state:", rooms);
         if (rooms[roomId]) {
-            console.log("New user joined the room ", roomId, "with peer id as", peerId);
+            console.log("New user joined the room", roomId, "with peer id as", peerId);
             rooms[roomId].push(peerId);
+            console.log("added peer to room. Updated rooms state:", rooms);
             socket.join(roomId);
             socket.emit("get-users", {
                 roomId,
                 participants: rooms[roomId]
             });
+        }
+        else {
+            console.log("Room not found with id:", roomId);
         }
     };
     socket.on("create-room", createRoom);

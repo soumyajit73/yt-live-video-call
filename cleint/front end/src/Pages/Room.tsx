@@ -38,20 +38,20 @@ const Room: React.FC = () => {
     const { id } = useParams();
     const { socket, user } = useContext(SocketContext);
 
-    const fetchParticipantList = ({ roomId, participants }: { roomId: string, participants: string[] }) => {
-        console.log("fetch room participants");
-        console.log(roomId, participants);
-    };
+    // const fetchParticipantList = ({ roomId, participants }: { roomId: string, participants: string[] }) => {
+    //     console.log("fetch room participants");
+    //     console.log(roomId, participants);
+    // };
 
     useEffect(() => {
         if (user) {
             console.log("new user with id", user._id, "has joined room", id);
             socket.emit("joined-room", { roomId: id, peerId: user._id });
-            socket.on("get-users", fetchParticipantList);
+            // socket.on("get-users", fetchParticipantList);
 
-            return () => {
-                socket.off("get-users", fetchParticipantList);
-            };
+            // return () => {
+            //     socket.off("get-users", fetchParticipantList);
+            // };
         }
     }, [id, user, socket]);
 
