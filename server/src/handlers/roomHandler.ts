@@ -45,7 +45,7 @@ import { v4 as UUIDv4 } from "uuid";
 import IRoomParams from "../interfaces/iRoomParams";
 const rooms: Record<string, string[]> = {};
 const roomHandler = (socket: Socket) => {
-    
+
 
     const createRoom = () => {
         const roomId = UUIDv4(); // unique room id for multiple connection exchange

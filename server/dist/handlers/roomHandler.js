@@ -17,14 +17,21 @@ const roomHandler = (socket) => {
         console.log("joined room called with roomId:", roomId, "and peerId:", peerId);
         console.log("Current rooms state:", rooms);
         if (rooms[roomId]) {
-            console.log("New user joined the room", roomId, "with peer id as", peerId);
-            rooms[roomId].push(peerId);
-            console.log("added peer to room. Updated rooms state:", rooms);
-            socket.join(roomId);
-            socket.emit("get-users", {
-                roomId,
-                participants: rooms[roomId]
-            });
+            // Check if the peerId already exists in the room to avoid duplicates
+            if (!rooms[roomId].includes(peerId)) {
+                console.log("New user joined the room", roomId, "with peer id as", peerId);
+                rooms[roomId].push(peerId);
+                console.log("added peer to room. Updated rooms state:", rooms);
+                socket.join(roomId);
+                socket.emit("get-users", {
+                    roomId,
+                    participants: rooms[roomId]
+                });
+                console.log("Emitted get-users event with participants:", rooms[roomId]);
+            }
+            else {
+                console.log("Peer ID already exists in the room:", peerId);
+            }
         }
         else {
             console.log("Room not found with id:", roomId);
