@@ -36,31 +36,38 @@ import { useEffect, useContext } from "react";
 import UserFeedPlayer from "../Components/UserFeedPlayer";
 
 const Room: React.FC = () => {
-    const { id } = useParams();
-    const { socket, user, stream } = useContext(SocketContext);
-
-    // const fetchParticipantList = ({ roomId, participants }: { roomId: string, participants: string[] }) => {
-    //     console.log("fetch room participants");
-    //     console.log(roomId, participants);
-    // };
+    const { id } = useParams<{ id: string }>(); // Ensure id is a string
+    const { socket, user, stream, peers } = useContext(SocketContext);
 
     useEffect(() => {
-        if (user) {
-            console.log("new user with id", user._id, "has joined room", id);
-            socket.emit("joined-room", { roomId: id, peerId: user._id });
-            // socket.on("get-users", fetchParticipantList);
-
-            // return () => {
-            //     socket.off("get-users", fetchParticipantList);
-            // };
+        if (user && id) {
+            console.log("New user with id", user.id, "has joined room", id);
+            socket.emit("joined-room", { roomId: id, peerId: user.id });
         }
-    }, [id, user, socket]);
+        console.log(peers);
+    }, [id, user, socket,peers]);
+
+    // Debugging peers
+    useEffect(() => {
+        console.log("Current peers:", peers);
+    }, [peers]);
 
     return (
         <div>
-            room: {id}
-            <UserFeedPlayer stream={stream}/>
+            Room: {id}
+            <div>Your feed:</div>
+            <UserFeedPlayer stream={stream} />
 
+            <div>
+                Other users' feeds:
+                {Object.keys(peers).length === 0 ? (
+                    <div>No other users online.</div>
+                ) : (
+                    Object.keys(peers).map(peerId => (
+                        <UserFeedPlayer key={peerId} stream={peers[peerId]} />
+                    ))
+                )}
+            </div>
         </div>
     );
 };
